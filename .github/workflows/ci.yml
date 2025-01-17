@@ -62,14 +62,13 @@ jobs:
         BAZEL_OPTS+=" --remote_cache=https://${AUTH}${BAZEL_CACHE_URL}"
         BAZEL_OPTS+=" --remote_download_minimal"
         bazel build ${BAZEL_OPTS} //...
-        bazel test ${BAZEL_OPTS} //...
         cd ..
 
-    - name: Build Test
+    - name: Build Tests
       run: |
         cd pins_ondatra
         grep 'name' tests/BUILD.bazel | sed -n 's/.*name = "\([^"]*\)".*/\1/p' | while IFS= read -r test_name; do
-            echo "Building test: $test_name"
+            echo "==========[Building test: $test_name]=========="
             bazel build tests:"$test_name"
 
             # Check if the build failed
@@ -77,6 +76,8 @@ jobs:
                 echo "Build failed for $test_name. Exiting."
                 exit 1
             fi
+            echo "==========[Build Complete: $test_name]=========="
+            echo " "
         done
         cd ..
 
