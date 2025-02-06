@@ -1,2 +1,1 @@
-Hi How are you
 teststing from inside sdn_tests
