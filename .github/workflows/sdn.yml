@@ -3,9 +3,11 @@ name: "build"
 on:
   push:
     branches: [ main ]
+    paths:
+      - 'sdn_tests/**'
   pull_request:
     branches: [ main ]
-    path:
+    paths:
       - 'sdn_tests/**'
 
 jobs:
