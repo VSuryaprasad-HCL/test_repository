@@ -1,0 +1,63 @@
+name: "Build and Test"
+
+on:
+  push:
+    branches: [ main ]
+    paths:
+      - 'test_repository/**'
+  pull_request_target:
+    branches: [ main ]
+    paths:
+      - 'test_repository/**'
+
+jobs:
+  build:
+    name: Build and Test
+
+    runs-on: ubuntu-22.04
+
+    steps:
+    # Checkout the code
+    - uses: actions/checkout@v3
+
+    # Save start time
+    - name: Save Start Time
+      uses: josStorer/get-current-time@v2
+      id: start-time
+      with:
+        format: X
+
+    # Run Build
+    - name: Build
+      run: |
+        ls -ltr
+        echo "Building from pipelines"
+
+    # Run Build
+    - name: test
+      run: |
+        echo "testing from pipelines"
+
+    # Save end time
+    - name: Save End Time
+      uses: josStorer/get-current-time@v2
+      id: end-time
+      with:
+        format: X
+
+    # Calculate build duration
+    - name: Calculate Build Duration
+      run: |
+        START=${{ steps.start-time.outputs.formattedTime }}
+        END=${{ steps.end-time.outputs.formattedTime }}
+        DURATION=$(( $END - $START ))
+        echo "Build duration: $DURATION seconds"
+        echo "duration=$DURATION" >> $GITHUB_ENV
+
+    # Save cache
+    - name: Save Cache
+      uses: actions/cache/save@v3
+      if: github.ref_name == 'master' || env.duration > 300
+      with:
+        path: "/tmp/repo-cache"
+        key: test-repo-cache-v3-${{ runner.os }}-${{ github.run_id }}
