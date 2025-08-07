@@ -3,12 +3,8 @@ name: "Build and Test"
 on:
   push:
     branches: [ main ]
-    paths:
-      - 'test_repository/**'
-  pull_request_target:
+  pull_request:
     branches: [ main ]
-    paths:
-      - 'test_repository/**'
 
 jobs:
   build:
@@ -20,13 +16,6 @@ jobs:
     # Checkout the code
     - uses: actions/checkout@v3
 
-    # Save start time
-    - name: Save Start Time
-      uses: josStorer/get-current-time@v2
-      id: start-time
-      with:
-        format: X
-
     # Run Build
     - name: Build
       run: |
@@ -37,22 +26,6 @@ jobs:
     - name: test
       run: |
         echo "testing from pipelines"
-
-    # Save end time
-    - name: Save End Time
-      uses: josStorer/get-current-time@v2
-      id: end-time
-      with:
-        format: X
-
-    # Calculate build duration
-    - name: Calculate Build Duration
-      run: |
-        START=${{ steps.start-time.outputs.formattedTime }}
-        END=${{ steps.end-time.outputs.formattedTime }}
-        DURATION=$(( $END - $START ))
-        echo "Build duration: $DURATION seconds"
-        echo "duration=$DURATION" >> $GITHUB_ENV
 
     # Save cache
     - name: Save Cache
