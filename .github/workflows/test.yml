@@ -30,7 +30,7 @@ jobs:
     # Save cache
     - name: Save Cache
       uses: actions/cache/save@v3
-      if: github.ref_name == 'master' || env.duration > 300
+      if: github.ref_name == 'main' || env.duration > 300
       with:
         path: "/tmp/repo-cache"
         key: test-repo-cache-v3-${{ runner.os }}-${{ github.run_id }}
